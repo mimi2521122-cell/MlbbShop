@@ -1,0 +1,1608 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>DIAMOND X UC SHOP ✰ PREMIUM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #00f2fe;
+    --secondary: #4facfe;
+    --accent: #ff0080;
+    --dark: #0a0e17;
+    --darker: #050811;
+    --card: rgba(16, 20, 31, 0.9);
+    --glass: rgba(255, 255, 255, 0.05);
+    --neon-glow: 0 0 20px rgba(0, 242, 254, 0.5);
+    --pink-glow: 0 0 20px rgba(255, 0, 128, 0.4);
+    --gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #ff0080 100%);
+    --gradient-reverse: linear-gradient(135deg, #ff0080 0%, #4facfe 50%, #00f2fe 100%);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--darker);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    padding-bottom: 80px; /* Bottom nav အတွက် space ထားပေး */
+  }
+
+  /* Animated Background */
+  .bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.1) 0%, transparent 50%);
+  }
+
+  .particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .particle {
+    position: absolute;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: float 20s infinite linear;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(100px, 100px) rotate(90deg); }
+    50% { transform: translate(0, 200px) rotate(180deg); }
+    75% { transform: translate(-100px, 100px) rotate(270deg); }
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Premium Header */
+  .header {
+    background: rgba(10, 14, 23, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--neon-glow);
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.1), transparent);
+    animation: shine 3s infinite;
+  }
+
+  @keyframes shine {
+    100% { left: 100%; }
+  }
+
+  .brand-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .brand-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    background: var(--gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .brand-logo i {
+    font-size: 32px;
+    color: white;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+  }
+
+  .brand-text {
+    flex: 1;
+  }
+
+  .shop-title {
+    font-size: 24px;
+    font-weight: 900;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+
+  .shop-tagline {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Live Stats */
+  .live-stats {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 242, 254, 0.1);
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: #8a9bb2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 5px;
+  }
+
+  /* Banner */
+  .banner-container {
+    width: 100%;
+    height: 180px;
+    border-radius: 25px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    position: relative;
+    box-shadow: var(--neon-glow);
+  }
+
+  .banner-slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .banner-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease;
+    border-radius: 25px;
+    overflow: hidden;
+  }
+
+  .banner-slide.active {
+    opacity: 1;
+  }
+
+  .banner-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+  }
+
+  .banner-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(10, 14, 23, 0.9), transparent);
+    padding: 20px;
+  }
+
+  .banner-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .banner-subtext {
+    font-size: 12px;
+    color: var(--primary);
+    margin-top: 5px;
+  }
+
+  /* Game Tabs */
+  .game-tabs {
+    display: flex;
+    background: rgba(16, 20, 31, 0.6);
+    border-radius: 20px;
+    padding: 5px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+  }
+
+  .game-tab {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #8a9bb2;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-tab.active {
+    background: var(--gradient);
+    color: white;
+    box-shadow: var(--neon-glow);
+    transform: translateY(-2px);
+  }
+
+  .game-tab i {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  /* Package Grid */
+  .packages-container {
+    background: var(--card);
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    box-shadow: var(--neon-glow);
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+  }
+
+  .section-title i {
+    color: var(--primary);
+  }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+
+  .package-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 242, 254, 0.1);
+    border-radius: 20px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .package-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .package-card:hover {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: var(--primary);
+    transform: translateY(-5px);
+  }
+
+  .package-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .package-card.selected {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: var(--primary);
+    box-shadow: var(--neon-glow);
+    transform: translateY(-5px) scale(1.02);
+  }
+
+  .package-card.selected::before {
+    transform: scaleX(1);
+  }
+
+  .package-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));
+  }
+
+  .package-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .package-price {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--primary);
+    background: rgba(0, 242, 254, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  /* Order Form */
+  .order-form {
+    background: var(--card);
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    box-shadow: var(--neon-glow);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .form-label i {
+    font-size: 16px;
+  }
+
+  .input-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  .input-field {
+    flex: 1;
+    position: relative;
+  }
+
+  .input-field input {
+    width: 100%;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 242, 254, 0.2);
+    border-radius: 15px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .input-field input:focus {
+    border-color: var(--primary);
+    background: rgba(0, 242, 254, 0.05);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  }
+
+  .input-field .placeholder {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8a9bb2;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .input-field input:focus + .placeholder,
+  .input-field input:not(:placeholder-shown) + .placeholder {
+    top: -10px;
+    left: 15px;
+    font-size: 12px;
+    color: var(--primary);
+    background: var(--card);
+    padding: 0 5px;
+  }
+
+  /* Nickname Display */
+  .nickname-display {
+    background: rgba(0, 242, 254, 0.1);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 15px;
+    display: none;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nickname-label {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .nickname-value {
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+  }
+
+  /* Payment Methods */
+  .payment-methods {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .payment-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(0, 242, 254, 0.2);
+    border-radius: 15px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .payment-card:hover {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+  }
+
+  .payment-card.active {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: var(--primary);
+    box-shadow: var(--neon-glow);
+  }
+
+  .payment-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: white;
+    padding: 8px;
+    margin: 0 auto 10px;
+  }
+
+  .payment-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 5px;
+  }
+
+  .payment-number {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Payment Details */
+  .payment-details {
+    background: rgba(255, 0, 128, 0.1);
+    border: 1px solid rgba(255, 0, 128, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .payment-details::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-reverse);
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .detail-row:last-child {
+    border-bottom: none;
+  }
+
+  .detail-label {
+    font-size: 13px;
+    color: #8a9bb2;
+  }
+
+  .detail-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .detail-number {
+    color: var(--primary);
+    font-weight: 900;
+  }
+
+  /* File Upload */
+  .file-upload {
+    margin-bottom: 25px;
+  }
+
+  .file-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .file-input {
+    width: 100%;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(0, 242, 254, 0.3);
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .file-input:hover {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: var(--primary);
+  }
+
+  /* Order Button */
+  .order-button {
+    width: 100%;
+    padding: 22px;
+    background: var(--gradient);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--neon-glow), var(--pink-glow);
+  }
+
+  .order-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+
+  .order-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 242, 254, 0.3), 0 0 30px rgba(255, 0, 128, 0.4);
+  }
+
+  .order-button:hover::before {
+    left: 100%;
+  }
+
+  .order-button:active {
+    transform: translateY(-2px);
+  }
+
+  .order-button:disabled {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Bottom Navigation - FIXED POSITION */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 14, 23, 0.95);
+    backdrop-filter: blur(20px);
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid rgba(0, 242, 254, 0.2);
+    z-index: 1000;
+    box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-item {
+    flex: 1;
+    text-align: center;
+    color: #8a9bb2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .nav-icon {
+    font-size: 22px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .nav-item.active {
+    color: var(--primary);
+  }
+
+  .nav-item.active .nav-icon {
+    color: var(--primary);
+    transform: translateY(-5px);
+  }
+
+  .nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 50%;
+  }
+
+  /* History Section */
+  .history-section {
+    display: none;
+  }
+
+  .history-container {
+    background: var(--card);
+    border-radius: 25px;
+    padding: 25px;
+    margin-bottom: 30px; /* Footer အတွက် space လျှော့ */
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    box-shadow: var(--neon-glow);
+  }
+
+  .history-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 242, 254, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .history-item:hover {
+    background: rgba(0, 242, 254, 0.1);
+    border-color: var(--primary);
+    transform: translateX(5px);
+  }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .history-game {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .history-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .status-pending {
+    background: rgba(250, 204, 21, 0.2);
+    color: #facc15;
+  }
+
+  .status-done {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+  }
+
+  .history-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .history-detail {
+    font-size: 12px;
+  }
+
+  .history-label {
+    color: #8a9bb2;
+    margin-bottom: 3px;
+  }
+
+  .history-value {
+    color: white;
+    font-weight: 600;
+  }
+
+  /* Footer - BOTTOM NAV ရဲ့အပေါ်မှာ ထားမယ် */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 30px;
+    margin-bottom: 80px; /* Bottom nav height အတွက် space ထားပေး */
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    color: #8a9bb2;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .support-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--gradient);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: var(--neon-glow);
+  }
+
+  .support-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 242, 254, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container {
+      padding: 10px;
+      padding-bottom: 20px;
+    }
+    
+    .packages-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .payment-methods {
+      grid-template-columns: 1fr;
+    }
+    
+    .header {
+      padding: 15px;
+    }
+    
+    .shop-title {
+      font-size: 20px;
+    }
+    
+    .footer {
+      margin-bottom: 70px;
+      padding: 30px 15px;
+    }
+    
+    .history-container {
+      margin-bottom: 20px;
+    }
+    
+    .bottom-nav {
+      padding: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="bg-animation"></div>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="brand-container">
+      <div class="brand-logo">
+        <i class="fas fa-gem"></i>
+      </div>
+      <div class="brand-text">
+        <div class="shop-title">Mr.TEAM SHOP MYANMAR</div>
+        <div class="shop-tagline">⚡ PREMIUM TOP-UP CENTER</div>
+      </div>
+    </div>
+    
+    <div class="live-stats">
+      <div class="stat">
+        <div class="stat-value" id="totalOrders">0</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="successRate">100%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">Live Support</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="banner-container">
+    <div class="banner-slider" id="bannerSlider"></div>
+    <div class="banner-overlay">
+      <div class="banner-text">⚡ INSTANT DELIVERY ⚡</div>
+      <div class="banner-subtext">3-30 Minutes • 100% Guaranteed</div>
+    </div>
+  </div>
+
+  <!-- Game Tabs -->
+  <div class="game-tabs">
+    <div class="game-tab active" onclick="switchGame('mlbb')">
+      <i class="fas fa-gamepad"></i> MLBB
+    </div>
+    <div class="game-tab" onclick="switchGame('pubg')">
+      <i class="fas fa-crosshairs"></i> PUBG
+    </div>
+  </div>
+
+  <!-- Shop Section -->
+  <div id="shopSection">
+    <!-- Packages -->
+    <div class="packages-container">
+      <div class="section-title">
+        <i class="fas fa-gem"></i>
+        Select Package
+      </div>
+      <div class="packages-grid" id="priceGrid"></div>
+      <div id="selectionSummary" style="display:none; margin-top:20px; padding:15px; border-radius:15px; background:var(--gradient); text-align:center; font-weight:900; color:white;"></div>
+    </div>
+
+    <!-- Order Form -->
+    <div class="order-form">
+      <div class="form-group">
+        <div class="form-label">
+          <i class="fas fa-user-circle"></i>
+          Account Information
+        </div>
+        <div class="input-container">
+          <div class="input-field">
+            <input id="playerId" type="number" placeholder=" " oninput="checkName()">
+            <div class="placeholder">Game ID</div>
+          </div>
+          <div class="input-field" id="serverField" style="width: 40%;">
+            <input id="serverId" type="number" placeholder=" " oninput="checkName()">
+            <div class="placeholder">Server</div>
+          </div>
+        </div>
+        <div id="nicknameDisplay" class="nickname-display">
+          <div class="nickname-label">Account Name</div>
+          <div class="nickname-value" id="nicknameValue">Loading...</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">
+          <i class="fas fa-credit-card"></i>
+          Payment Method
+        </div>
+        <div class="payment-methods">
+          <div class="payment-card active" onclick="selectPM('KPay')">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrwuLg7a9PCXKP_VjfPtTNnIiO2ejgI2DfmlZAvgWlJA&s=10" class="payment-icon">
+            <div class="payment-name">KPay</div>
+            <div class="payment-number">09*********</div>
+          </div>
+          <div class="payment-card" onclick="selectPM('Wave')">
+            <img src="https://cdn.aptoide.com/imgs/f/9/4/f94b179fd74f339296157336828b47b3_icon.png" class="payment-icon">
+            <div class="payment-name">Wave Money</div>
+            <div class="payment-number">09*********</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-details">
+        <div class="detail-row">
+          <span class="detail-label">Account Name:</span>
+          <span class="detail-value" id="dispName">Aung Thant Zin Ko</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Account Number:</span>
+          <span class="detail-value detail-number" id="dispNumber">09988842463</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Payment Status:</span>
+          <span class="detail-value" style="color: #22c55e;">✅ Ready</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">
+          <i class="fas fa-file-upload"></i>
+          Upload Payment Proof
+        </div>
+        <input type="file" id="slip" accept="image/*" class="file-input">
+      </div>
+
+      <button class="order-button" id="orderBtn" onclick="submitOrder()">
+        <i class="fas fa-bolt"></i> CONFIRM ORDER
+      </button>
+    </div>
+  </div>
+
+  <!-- History Section -->
+  <div id="historySection" class="history-section">
+    <div class="history-container">
+      <div class="section-title">
+        <i class="fas fa-history"></i>
+        Order History
+      </div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">
+      © 2025 DIAMOND X UC SHOP MYANMAR<br>
+      Instant Delivery • Secure Payment • 24/7 Support
+    </div>
+    <a href="https://t.me/Zinko158" class="support-button" target="_blank">
+      <i class="fab fa-telegram-plane"></i>
+      Contact @Zinko158
+    </a>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="switchTab('shop')">
+    <div class="nav-icon"><i class="fas fa-shopping-bag"></i></div>
+    <div class="nav-label">SHOP</div>
+  </div>
+  <div class="nav-item" onclick="switchTab('history')">
+    <div class="nav-icon"><i class="fas fa-receipt"></i></div>
+    <div class="nav-label">ORDERS</div>
+  </div>
+</div>
+
+<script>
+// --- [CONFIG] ---
+const firebaseConfig = {
+  apiKey: "AIzaSyCviPKirzZi0jdOP-gi4qdm4EC35f11uCA",
+  authDomain: "diamond-shop-e2fcb.firebaseapp.com",
+  databaseURL: "https://diamond-shop-e2fcb-default-rtdb.firebaseio.com",
+  projectId: "diamond-shop-e2fcb",
+  storageBucket: "diamond-shop-e2fcb.appspot.com",
+  messagingSenderId: "725320240384",
+  appId: "1:725320240384:web:d535fedda3c99ab5e937e5"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const BOT_TOKEN = "8425071763:AAGyZOqKg2yXiXSfJuTzd5Qx43WHYxT8aJY";
+const CHAT_ID = "7308292609";
+
+const diaIcon = "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334250020_b0872ecf-3f35-4a3a-be97-6e0073600751.png";
+const ucIcon = "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/60_PUBG_UC.png";
+
+const MLBB = [
+  {label:'5 Diamonds', price:650, img: diaIcon},
+  {label:'11 Diamonds', price:900, img: diaIcon},
+  {label:'22 Diamonds', price:1800, img: diaIcon},
+  {label:'33 Diamonds', price:2700, img: diaIcon},
+  {label:'44 Diamonds', price:3600, img: diaIcon}, 
+  {label:'56 Diamonds', price:4000, img: diaIcon}, 
+  {label:'86 Diamonds', price:4900, img: diaIcon},
+  {label:'112 Diamonds', price:7600, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'172 Diamonds', price:9800, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'257 Diamonds', price:15000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'343 Diamonds', price:19500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'429 Diamonds', price:24500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245898_e3d40beb-2e0d-473c-b9ff-be6c797666db.png"},
+  {label:'514 Diamonds', price:28700, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'600 Diamonds', price:34000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'706 Diamonds', price:39000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'878 Diamonds', price:49000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'963 Diamonds', price:53000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245337_6859fea9-7abd-48f2-8625-da79f9f29abe.png"},
+  {label:'1049 Diamonds', price:56000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'1135 Diamonds', price:63000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'1412 Diamonds', price:77000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335245056_efd05219-8413-4d21-b8be-79d49af43c09.png"},
+  {label:'2195 Diamonds', price:118000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335244496_8ccf974b-354c-4832-a3f4-c194147570f5.png"},
+  {label:'3688 Diamonds', price:195000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},        
+  {label:'5532 Diamonds', price:295000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},
+  {label:'9288 Diamonds', price:489000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760335243879_e08cea74-4cdb-4629-a6b6-e28db8ebf4b8.png"},
+  {label:'50+50 Diamonds', price:3300, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222477_bdd28040-0bd9-4dff-b748-ed7b1a0aecdd.png"},          
+  {label:'150+150 Diamonds', price:9500, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222447_c62c5300-1e1f-4f91-90f4-d677eeb054db.png"},
+  {label:'250+250 Diamonds', price:16000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222415_581d8871-25f1-4a8c-a45c-297bfbc69d6c.png"},
+  {label:'500+500 Diamonds', price:31000, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334222388_daa6d2f0-0249-4fa5-bb28-5ce48267c1d8.png"},
+  {label:'Twilight Pass', price:33000, img: "https://img-cdn-sg.payermax.com/shoplay365/prod/upload/app-goods/twilight2021061014233263520241218054459128.png"},     
+  {label:'Weekly Pass', price:5950, img: "https://cdn1.codashop.com/images/106_5e7a01a7-89b9-4b13-a512-a3e72f63f0d1_product/1760334604324_13680c57-734d-4b72-a430-8bdbded02ab8.png"}
+];
+
+const PUBG = [
+  {label:'60 UC', price:4300, img: ucIcon},
+  {label:'120 UC', price:8300, img: ucIcon},
+  {label:'180 UC', price:12300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/60_PUBG_UC.png"},
+  {label:'240 UC', price:16300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'325 UC', price:19800, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'385 UC', price:24000, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/325_PUBG_UC.png"},
+  {label:'445 UC', price:28100, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+  {label:'505 UC', price:32100, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"}, 
+  {label:'660 UC', price:36900, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+  {label:'720 UC', price:43900, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+  {label:'1800 UC', price:98300, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/660_PUBG_UC.png"},
+  {label:'3850 UC', price:199500, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/3850_PUBG_UC.png"},
+  {label:'8100 UC', price:399000, img: "https://cdn1.codashop.com/S/content/common/images/denom-image/PUBG/8100_PUBG_UC.png"}
+];
+
+let currentGame = 'mlbb', selectedPackage = null, verifiedName = "", payment = "KPay";
+
+// Create animated background
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    
+    const size = Math.random() * 5 + 1;
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const duration = Math.random() * 30 + 20;
+    const delay = Math.random() * 5;
+    
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${x}%`;
+    particle.style.top = `${y}%`;
+    particle.style.opacity = Math.random() * 0.3 + 0.1;
+    particle.style.background = Math.random() > 0.5 ? 'var(--primary)' : 'var(--accent)';
+    particle.style.animationDuration = `${duration}s`;
+    particle.style.animationDelay = `${delay}s`;
+    
+    container.appendChild(particle);
+  }
+}
+
+// Create banner slides
+function createBanner() {
+  const banners = [
+    "https://news.codashop.com/mm/wp-content/uploads/sites/8/2020/09/How-to-Top-Up-Mobile-Legends.png",
+    "https://news.codashop.com/ph/wp-content/uploads/sites/5/2023/09/MLBB-Badang-Hero-Guide-1.jpg",
+    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fcb56904-cc19-4723-acc9-0f9cd2b0e295/disf1wd-4bf87aff-f257-4876-aa50-f166ce2b982c.jpg/v1/fill/w_1280,h_720,q_75,strp/lucas_hero_splash_art_mlbb_by_nurm10_disf1wd-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9mY2I1NjkwNC1jYzE5LTQ3MjMtYWNjOS0wZjljZDJiMGUyOTUvZGlzZjF3ZC00YmY4N2FmZi1mMjU3LTQ4NzYtYWE1MC1mMTY2Y2UyYjk4MmMuanBnIiwiaGVpZ2h0IjoiPD03MjAiLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS53YXRlcm1hcmsiXSwid21rIjp7InBhdGgiOiIvd20vZmNiNTY5MDQtY2MxOS00NzIzLWFjYzktMGY5Y2QyYjBlMjk1L251cm0xMC00LnBuZyIsIm9wYWNpdHkiOjk1LCJwcm9wb3J0aW9ucyI6MC40NSwiZ3Jhdml0eSI6ImNlbnRlciJ9fQ.C97qtpyxEa8yAtz5p5qUzGTwN0IFBAjHA4JESHGEpEQ",
+    "https://i.postimg.cc/T3b2T5J6/kimmy-skin-charge-leader-in-mobile-legends-qw-1910x1075.jpg",
+    "https://img-cdn-sg.payermax.com/pay/jolly-mmc-auth/prod/app-goods/mlbb-oct-detailbanner20250930070257163.jpg?__jm_cache=1",
+    "https://news.codashop.com/ph/wp-content/uploads/sites/5/2025/01/MLBB-Blog-1280x720-Dyrroth.jpg",
+    "https://cdn.prod.website-files.com/65956e2711516206d2d1258f/66afcf00279b215f08df85ca_mlbb2.webp",
+    "https://news.seagm.com/wp-content/uploads/2025/09/How-to-Buy-MLBB-Diamonds-2025-Top-Up-Guide.png",
+    "https://i.postimg.cc/sDvdXvdb/Internet-20251225-004257-14.jpg"
+  ];
+
+  const slider = document.getElementById('bannerSlider');
+  banners.forEach((img, index) => {
+    const slide = document.createElement('div');
+    slide.className = `banner-slide ${index === 0 ? 'active' : ''}`;
+    slide.innerHTML = `<img src="${img}" alt="Banner ${index + 1}">`;
+    slider.appendChild(slide);
+  });
+
+  // Auto slide
+  setInterval(() => {
+    const slides = document.querySelectorAll('.banner-slide');
+    const active = document.querySelector('.banner-slide.active');
+    let next = active.nextElementSibling;
+    
+    if (!next) next = slides[0];
+    
+    active.classList.remove('active');
+    next.classList.add('active');
+  }, 4000);
+}
+
+// Nickname Check Function
+async function checkName() {
+  if (currentGame !== 'mlbb') {
+    document.getElementById('nicknameDisplay').style.display = 'none';
+    return;
+  }
+  
+  const id = document.getElementById('playerId').value;
+  const sv = document.getElementById('serverId').value;
+  const display = document.getElementById('nicknameDisplay');
+  const value = document.getElementById('nicknameValue');
+  
+  if (id.length >= 5 && sv.length >= 3) {
+    value.innerText = "🔍 Checking...";
+    display.style.display = 'block';
+    
+    try {
+      const res = await fetch(`https://api.isan.eu.org/nickname/ml?id=${id}&server=${sv}`);
+      const data = await res.json();
+      
+      if (data.nickname || data.name) {
+        verifiedName = data.nickname || data.name;
+        value.innerHTML = `✅ ${verifiedName}`;
+        value.style.color = "#22c55e";
+      } else {
+        verifiedName = "";
+        value.innerHTML = "❌ ID Not Found";
+        value.style.color = "#ef4444";
+      }
+    } catch (e) {
+      verifiedName = "";
+      value.innerHTML = "⚠️ Check Failed";
+      value.style.color = "#f59e0b";
+    }
+  } else {
+    display.style.display = 'none';
+    verifiedName = "";
+  }
+}
+
+// Format number with commas
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Render package grid
+function renderGrid() {
+  const grid = document.getElementById('priceGrid');
+  grid.innerHTML = '';
+  
+  const list = currentGame === 'mlbb' ? MLBB : PUBG;
+  list.forEach((it, index) => {
+    const el = document.createElement('div');
+    el.className = 'package-card';
+    el.style.animationDelay = `${index * 0.05}s`;
+    
+    el.innerHTML = `
+      <img src="${it.img}" class="package-icon">
+      <div class="package-name">${it.label}</div>
+      <div class="package-price">${formatNumber(it.price)} Ks</div>
+    `;
+    
+    el.onclick = () => {
+      document.querySelectorAll('.package-card').forEach(x => x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPackage = it;
+      
+      const summary = document.getElementById('selectionSummary');
+      summary.style.display = 'block';
+      summary.innerHTML = `🛒 SELECTED: ${it.label} - ${formatNumber(it.price)} Ks`;
+      
+      // Animate selection
+      el.style.transform = 'translateY(-5px) scale(1.02)';
+      setTimeout(() => {
+        el.style.transform = 'translateY(-5px) scale(1.02)';
+      }, 300);
+    };
+    
+    grid.appendChild(el);
+  });
+}
+
+// Switch game
+function switchGame(name) {
+  currentGame = name;
+  
+  // Update tabs
+  document.querySelectorAll('.game-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.game-tab')[name === 'mlbb' ? 0 : 1].classList.add('active');
+  
+  // Update server field
+  document.getElementById('serverField').style.display = name === 'mlbb' ? 'block' : 'none';
+  
+  // Reset nickname
+  document.getElementById('nicknameDisplay').style.display = 'none';
+  verifiedName = "";
+  
+  // Reset selection
+  selectedPackage = null;
+  document.getElementById('selectionSummary').style.display = 'none';
+  
+  // Render new grid
+  renderGrid();
+  
+  // Animate transition
+  const grid = document.getElementById('priceGrid');
+  grid.style.opacity = '0';
+  setTimeout(() => {
+    grid.style.opacity = '1';
+    grid.style.transition = 'opacity 0.3s ease';
+  }, 10);
+}
+
+// Select payment method
+function selectPM(type) {
+  payment = type;
+  
+  // Update UI
+  document.querySelectorAll('.payment-card').forEach(card => card.classList.remove('active'));
+  document.querySelectorAll('.payment-card')[type === 'KPay' ? 0 : 1].classList.add('active');
+  
+  // Update details
+  if (type === 'KPay') {
+    document.getElementById('dispNumber').innerText = '09988842463';
+    document.getElementById('dispName').innerText = 'Aung Thant Zin Ko';
+  } else {
+    document.getElementById('dispNumber').innerText = '09953852354';
+    document.getElementById('dispName').innerText = 'Aye Sander Win';
+  }
+  
+  // Animate selection
+  const card = document.querySelector('.payment-card.active');
+  card.style.transform = 'translateY(-3px)';
+  setTimeout(() => {
+    card.style.transform = '';
+  }, 300);
+}
+
+// Switch tab
+function switchTab(tab) {
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  document.querySelectorAll('.nav-item')[tab === 'shop' ? 0 : 1].classList.add('active');
+  
+  // Update sections
+  document.getElementById('shopSection').style.display = tab === 'shop' ? 'block' : 'none';
+  document.getElementById('historySection').style.display = tab === 'history' ? 'block' : 'none';
+  
+  if (tab === 'history') {
+    renderHistory();
+  }
+}
+
+// Submit order
+async function submitOrder() {
+  const file = document.getElementById('slip').files[0];
+  const pid = document.getElementById('playerId').value;
+  const sid = document.getElementById('serverId').value;
+  
+  if (!pid || pid.length < 5) {
+    alert('Please enter a valid Game ID!');
+    return;
+  }
+  
+  if (!selectedPackage) {
+    alert('Please select a package!');
+    return;
+  }
+  
+  if (!file) {
+    alert('Please upload payment proof!');
+    return;
+  }
+  
+  const btn = document.getElementById('orderBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+  btn.disabled = true;
+  
+  const orderTime = new Date().toLocaleString('en-US', { 
+    hour: 'numeric', 
+    minute: 'numeric', 
+    hour12: true,
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+  
+  const orderId = "ORD-" + Date.now();
+  const orderData = { 
+    orderId, 
+    game: currentGame.toUpperCase(), 
+    item: selectedPackage.label, 
+    price: selectedPackage.price, 
+    playerId: pid, 
+    serverId: sid || "Global", 
+    nickname: verifiedName || "Unknown", 
+    paymentMethod: payment,
+    status: "Pending", 
+    date: orderTime,
+    timestamp: Date.now()
+  };
+  
+  try {
+    // Save to Firebase
+    await db.ref('orders/' + orderId).set(orderData);
+    
+    // Save to local storage
+    let orders = JSON.parse(localStorage.getItem('my_orders') || "[]");
+    orders.push(orderId);
+    localStorage.setItem('my_orders', JSON.stringify(orders));
+    
+    // Send to Telegram
+    const telegramMsg = `
+🎮 <b>🆕 NEW ORDER RECEIVED!</b> 🎮
+━━━━━━━━━━━━━━━━━━━━━
+<b>📦 Package:</b> ${orderData.item}
+<b>💰 Price:</b> ${formatNumber(orderData.price)} MMK
+<b>🎯 Game:</b> ${orderData.game}
+━━━━━━━━━━━━━━━━━━━━━
+<b>👤 Player Info:</b>
+ID: <code>${pid}</code>
+Server: <code>${orderData.serverId}</code>
+Name: <b>${verifiedName || 'Unknown'}</b>
+━━━━━━━━━━━━━━━━━━━━━
+<b>💳 Payment:</b> ${payment}
+<b>🕒 Time:</b> ${orderTime}
+<b>🆔 Order ID:</b> <code>${orderId}</code>
+━━━━━━━━━━━━━━━━━━━━━
+<i>Please verify the receipt and update status.</i>`;
+    
+    const fd = new FormData();
+    fd.append('chat_id', CHAT_ID);
+    fd.append('photo', file);
+    fd.append('caption', telegramMsg);
+    fd.append('parse_mode', 'HTML');
+    
+    fd.append('reply_markup', JSON.stringify({
+      inline_keyboard: [[
+        { text: "✅ Mark as Done", callback_data: "done_" + orderId }
+      ]]
+    }));
+    
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { 
+      method: 'POST', 
+      body: fd 
+    });
+    
+    if (!response.ok) {
+      // Try sending as text if photo fails
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: telegramMsg.replace(/<[^>]*>/g, ''),
+          parse_mode: 'HTML'
+        })
+      });
+    }
+    
+    // Success animation
+    btn.innerHTML = '<i class="fas fa-check"></i> ORDER SUCCESS!';
+    btn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+    
+    setTimeout(() => {
+      alert('✅ Order placed successfully!\nYour diamonds will be delivered within 3-30 minutes.');
+      
+      // Reset form
+      document.getElementById('playerId').value = '';
+      document.getElementById('serverId').value = '';
+      document.getElementById('slip').value = '';
+      document.getElementById('nicknameDisplay').style.display = 'none';
+      document.querySelectorAll('.package-card').forEach(x => x.classList.remove('selected'));
+      document.getElementById('selectionSummary').style.display = 'none';
+      
+      // Reset button
+      btn.innerHTML = '<i class="fas fa-bolt"></i> CONFIRM ORDER';
+      btn.disabled = false;
+      btn.style.background = 'var(--gradient)';
+      
+      // Switch to history
+      switchTab('history');
+      
+    }, 1000);
+    
+  } catch (e) {
+    console.error('Order error:', e);
+    
+    // Error state
+    btn.innerHTML = '<i class="fas fa-times"></i> ORDER FAILED';
+    btn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+    
+    setTimeout(() => {
+      alert('❌ Order failed!\nPlease check your connection and try again.');
+      
+      // Reset button
+      btn.innerHTML = '<i class="fas fa-bolt"></i> CONFIRM ORDER';
+      btn.disabled = false;
+      btn.style.background = 'var(--gradient)';
+    }, 1000);
+  }
+}
+
+// Render history
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  const orderIds = JSON.parse(localStorage.getItem('my_orders') || "[]");
+  
+  if (!orderIds.length) {
+    list.innerHTML = `
+      <div class="history-item">
+        <div style="text-align: center; padding: 40px 20px; color: #8a9bb2;">
+          <i class="fas fa-history" style="font-size: 40px; margin-bottom: 15px;"></i>
+          <div>No orders yet</div>
+          <div style="font-size: 12px; margin-top: 10px;">Your orders will appear here</div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+  
+  list.innerHTML = '';
+  
+  orderIds.reverse().forEach(id => {
+    db.ref('orders/' + id).on('value', (snap) => {
+      const order = snap.val();
+      if (!order) return;
+      
+      let item = document.getElementById(`history-${id}`);
+      if (!item) {
+        item = document.createElement('div');
+        item.id = `history-${id}`;
+        item.className = 'history-item';
+        list.appendChild(item);
+      }
+      
+      const statusClass = order.status === "Done" ? "status-done" : "status-pending";
+      
+      item.innerHTML = `
+        <div class="history-header">
+          <div class="history-game">${order.game} - ${order.item}</div>
+          <div class="history-status ${statusClass}">${order.status}</div>
+        </div>
+        <div style="font-size: 12px; color: #8a9bb2;">${order.date}</div>
+        <div class="history-details">
+          <div class="history-detail">
+            <div class="history-label">Player ID</div>
+            <div class="history-value">${order.playerId}</div>
+          </div>
+          <div class="history-detail">
+            <div class="history-label">Price</div>
+            <div class="history-value">${formatNumber(order.price)} Ks</div>
+          </div>
+          <div class="history-detail">
+            <div class="history-label">Payment</div>
+            <div class="history-value">${order.paymentMethod || payment}</div>
+          </div>
+          <div class="history-detail">
+            <div class="history-label">Order ID</div>
+            <div class="history-value" style="font-size: 10px;">${order.orderId}</div>
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  createBanner();
+  renderGrid();
+  selectPM('KPay');
+  
+  // Load stats
+  db.ref('orders').once('value').then(snapshot => {
+    const orders = snapshot.val();
+    if (orders) {
+      const total = Object.keys(orders).length;
+      const done = Object.values(orders).filter(o => o.status === "Done").length;
+      const successRate = total > 0 ? Math.round((done / total) * 100) : 100;
+      
+      document.getElementById('totalOrders').textContent = total;
+      document.getElementById('successRate').textContent = `${successRate}%`;
+    }
+  });
+  
+  // Add input listeners
+  document.getElementById('playerId').addEventListener('input', checkName);
+  document.getElementById('serverId').addEventListener('input', checkName);
+});
+</script>
+</body>
+  </html>
